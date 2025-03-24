@@ -1,13 +1,21 @@
-[gd_scene load_steps=14 format=3 uid="uid://bxfomhc8d0je3"]
+[gd_scene load_steps=17 format=3 uid="uid://bxfomhc8d0je3"]
 
 [ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://planet.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://7ki8g0702dfi" path="res://backgrounds/hazy_nebulae_1.png" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://hevkdf8sy6g7" path="res://parameters.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://buadbseghxws6" path="res://terrain.gdshader" id="2_h2yge"]
 [ext_resource type="Shader" uid="uid://c52dgl78i4wij" path="res://water.gdshader" id="3_1bvp3"]
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7mycd"]
+panorama = ExtResource("1_lquwl")
+
+[sub_resource type="Sky" id="Sky_272bh"]
+sky_material = SubResource("PanoramaSkyMaterial_7mycd")
+
 [sub_resource type="Environment" id="Environment_h2yge"]
-background_mode = 1
+background_mode = 2
 background_color = Color(0.00183333, 0, 0.01, 1)
+sky = SubResource("Sky_272bh")
 ambient_light_source = 2
 ambient_light_color = Color(0.197937, 0.197937, 0.197937, 1)
 tonemap_mode = 2
@@ -16,10 +24,11 @@ sdfgi_bounce_feedback = 1.99
 glow_enabled = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0xm2m"]
-noise_type = 3
+noise_type = 0
 seed = 4
 frequency = 1.0
-fractal_lacunarity = 3.255
+fractal_octaves = 3
+fractal_lacunarity = 4.37
 
 [sub_resource type="Gradient" id="Gradient_h2yge"]
 offsets = PackedFloat32Array(0, 0.462069, 0.603448, 0.689655, 0.958621)
@@ -34,7 +43,7 @@ shader = ExtResource("2_h2yge")
 shader_parameter/specular = 0.8
 shader_parameter/roughness = 0.8
 shader_parameter/radius = 10.0
-shader_parameter/height = 4.0
+shader_parameter/height = 2.5
 shader_parameter/gradient = SubResource("GradientTexture1D_1bvp3")
 
 [sub_resource type="Gradient" id="Gradient_1bvp3"]
@@ -68,15 +77,17 @@ corner_detail = 20
 environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-4.37114e-08, -0.382683, 0.92388, 0, 0.923879, 0.382684, -0.999999, 1.67276e-08, -4.03841e-08, 0, 0, 0)
+transform = Transform3D(0.707106, -0.270598, 0.653282, 0, 0.923879, 0.382684, -0.707106, -0.270598, 0.653282, 0, 0, 0)
+light_energy = 0.5
 shadow_enabled = true
 
 [node name="Planet" type="Node3D" parent="."]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.642788, -0.766044, 0, 0.766044, 0.642788, 0, 0, 0)
 script = ExtResource("1_ig7tw")
 detail = 256
 noise = SubResource("FastNoiseLite_0xm2m")
-height = 4.0
+height = 2.5
 rotation_speed = 0.1
 water_level = 0.504
 terrain_material = SubResource("ShaderMaterial_1bvp3")

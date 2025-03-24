@@ -18,7 +18,7 @@ func update_planet():
 
 
 func _on_generate_button_pressed():
-	planet.noise.seed = randi()
+	#planet.noise.seed = randi()
 	update_planet()
 
 
