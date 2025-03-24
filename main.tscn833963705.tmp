@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxfomhc8d0je3"]
+
+[ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://planet.gd" id="1_ig7tw"]
+
+[node name="Main" type="Node3D"]
+
+[node name="Planet" type="MeshInstance3D" parent="."]
+script = ExtResource("1_ig7tw")
+subdivisions = null
+noise_scale = null
+height_multiplier = null
+seed = null

@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="PlanetGen"
+run/main_scene="uid://bxfomhc8d0je3"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1600
+window/size/window_height_override=900
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/msaa_3d=1
+anti_aliasing/quality/screen_space_aa=1
