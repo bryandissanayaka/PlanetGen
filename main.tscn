@@ -22,7 +22,7 @@ frequency = 1.0
 fractal_lacunarity = 3.255
 
 [sub_resource type="Gradient" id="Gradient_h2yge"]
-offsets = PackedFloat32Array(0.00689655, 0.462069, 0.603448, 0.689655, 0.958621)
+offsets = PackedFloat32Array(0, 0.462069, 0.603448, 0.689655, 0.958621)
 colors = PackedColorArray(0.89, 0.878578, 0.2047, 1, 0.362667, 0.68, 0.136, 1, 0.45, 0.105, 0, 1, 0.68, 0.565307, 0.5304, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_1bvp3"]
@@ -78,7 +78,7 @@ detail = 256
 noise = SubResource("FastNoiseLite_0xm2m")
 height = 4.0
 rotation_speed = 0.1
-water_level = 0.8445
+water_level = 0.504
 terrain_material = SubResource("ShaderMaterial_1bvp3")
 water_material = SubResource("ShaderMaterial_h2yge")
 
@@ -92,6 +92,7 @@ fov = 70.0
 far = 300.0
 
 [node name="Parameters" type="Control" parent="."]
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
