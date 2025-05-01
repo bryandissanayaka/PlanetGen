@@ -1,10 +1,12 @@
-[gd_scene load_steps=17 format=3 uid="uid://bxfomhc8d0je3"]
+[gd_scene load_steps=21 format=3 uid="uid://bxfomhc8d0je3"]
 
 [ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://planet.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://7ki8g0702dfi" path="res://backgrounds/hazy_nebulae_1.png" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://hevkdf8sy6g7" path="res://parameters.gd" id="2_0xm2m"]
-[ext_resource type="Shader" uid="uid://buadbseghxws6" path="res://terrain.gdshader" id="2_h2yge"]
-[ext_resource type="Shader" uid="uid://c52dgl78i4wij" path="res://water.gdshader" id="3_1bvp3"]
+[ext_resource type="Shader" uid="uid://buadbseghxws6" path="res://shaders/terrain.gdshader" id="2_h2yge"]
+[ext_resource type="Shader" uid="uid://c52dgl78i4wij" path="res://shaders/water.gdshader" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://c00kgit3xi5k" path="res://shaders/terrain_height_gradient.tres" id="4_272bh"]
+[ext_resource type="Script" uid="uid://i6jl6nfieqfr" path="res://camera.gd" id="5_7mycd"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7mycd"]
 panorama = ExtResource("1_lquwl")
@@ -16,35 +18,36 @@ sky_material = SubResource("PanoramaSkyMaterial_7mycd")
 background_mode = 2
 background_color = Color(0.00183333, 0, 0.01, 1)
 sky = SubResource("Sky_272bh")
+sky_rotation = Vector3(0, 2.61799, 0)
 ambient_light_source = 2
-ambient_light_color = Color(0.197937, 0.197937, 0.197937, 1)
+ambient_light_color = Color(0.122252, 0.122252, 0.122252, 1)
 tonemap_mode = 2
 sdfgi_read_sky_light = false
 sdfgi_bounce_feedback = 1.99
 glow_enabled = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0xm2m"]
-noise_type = 0
-seed = 4
-frequency = 1.0
-fractal_octaves = 3
-fractal_lacunarity = 4.37
+frequency = 0.5
+fractal_lacunarity = 3.0
 
-[sub_resource type="Gradient" id="Gradient_h2yge"]
-offsets = PackedFloat32Array(0, 0.462069, 0.603448, 0.689655, 0.958621)
-colors = PackedColorArray(0.89, 0.878578, 0.2047, 1, 0.362667, 0.68, 0.136, 1, 0.45, 0.105, 0, 1, 0.68, 0.565307, 0.5304, 1, 1, 1, 1, 1)
+[sub_resource type="Gradient" id="Gradient_7mycd"]
+offsets = PackedFloat32Array(0, 0.273885, 0.573248, 0.757962, 0.866242)
+colors = PackedColorArray(0.235294, 0.760784, 0.831373, 1, 0.00392157, 0.419608, 0.431373, 1, 0, 0.737255, 0.352941, 1, 0.353209, 0.286783, 0.138444, 1, 0.815686, 0.698039, 0.443137, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1bvp3"]
-gradient = SubResource("Gradient_h2yge")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_272bh"]
+gradient = SubResource("Gradient_7mycd")
+width = 100
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1bvp3"]
 render_priority = 0
 shader = ExtResource("2_h2yge")
 shader_parameter/specular = 0.8
-shader_parameter/roughness = 0.8
+shader_parameter/roughness = 1.395
 shader_parameter/radius = 10.0
 shader_parameter/height = 2.5
-shader_parameter/gradient = SubResource("GradientTexture1D_1bvp3")
+shader_parameter/gradient = ExtResource("4_272bh")
+shader_parameter/climate_gradient = SubResource("GradientTexture1D_272bh")
+shader_parameter/climate_strength = 0.0
 
 [sub_resource type="Gradient" id="Gradient_1bvp3"]
 offsets = PackedFloat32Array(0, 0.227586, 0.572414, 0.941379)
@@ -59,17 +62,39 @@ shader = ExtResource("3_1bvp3")
 shader_parameter/specular = 0.8
 shader_parameter/roughness = 0.8
 shader_parameter/radius = 10.0
-shader_parameter/level = 11.23
+shader_parameter/level = 10.5
 shader_parameter/gradient = SubResource("GradientTexture1D_lquwl")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bvp3"]
-bg_color = Color(0.16, 0.16, 0.16, 1)
+bg_color = Color(0, 0, 0, 0.639216)
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
 corner_detail = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_5vw27"]
+font_size = 24
+outline_size = 24
+outline_color = Color(0.17712, 0.1539, 0.27, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_272bh"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 6.0
+expand_margin_top = 22.0
+expand_margin_right = 6.0
+expand_margin_bottom = 22.0
 
 [node name="Main" type="Node3D"]
 
@@ -77,19 +102,15 @@ corner_detail = 20
 environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.707106, -0.270598, 0.653282, 0, 0.923879, 0.382684, -0.707106, -0.270598, 0.653282, 0, 0, 0)
-light_energy = 0.5
+transform = Transform3D(0.707107, -0.270598, 0.653281, 0, 0.92388, 0.382683, -0.707107, -0.270598, 0.653281, 0, 0, 0)
+light_energy = 0.6
 shadow_enabled = true
 
 [node name="Planet" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.642788, -0.766044, 0, 0.766044, 0.642788, 0, 0, 0)
 script = ExtResource("1_ig7tw")
 detail = 256
 noise = SubResource("FastNoiseLite_0xm2m")
-height = 2.5
-rotation_speed = 0.1
-water_level = 0.504
 terrain_material = SubResource("ShaderMaterial_1bvp3")
 water_material = SubResource("ShaderMaterial_h2yge")
 
@@ -97,9 +118,13 @@ water_material = SubResource("ShaderMaterial_h2yge")
 
 [node name="Water" type="MeshInstance3D" parent="Planet"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_7mycd")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 25)
-fov = 70.0
+fov = 60.0
 far = 300.0
 
 [node name="Parameters" type="Control" parent="."]
@@ -115,6 +140,7 @@ size_flags_vertical = 3
 script = ExtResource("2_0xm2m")
 
 [node name="Panel" type="Panel" parent="Parameters"]
+z_as_relative = false
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -137,28 +163,471 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
+[node name="Tab0" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+text = "PLANET GENERATOR
+"
+label_settings = SubResource("LabelSettings_5vw27")
+horizontal_alignment = 1
+
+[node name="CameraControls" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+text = "Camera Controls"
+horizontal_alignment = 1
+
+[node name="Rotation" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
 
-[node name="RotationLabel" type="Label" parent="Parameters/Panel/MarginContainer/VBoxContainer"]
+[node name="RotationLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Rotation"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Rotation"
+text = "Spin:"
 
-[node name="RotationSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/VBoxContainer"]
+[node name="RotationSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/Rotation"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
 min_value = -1.0
 max_value = 1.0
 step = 0.0
 value = 1.0
+scrollable = false
+tick_count = 3
 
-[node name="_empty" type="Label" parent="Parameters/Panel/MarginContainer/VBoxContainer"]
+[node name="StopButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab0/Rotation"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = " Stop "
+
+[node name="Pitch" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
 
-[node name="GenerateButton" type="Button" parent="Parameters/Panel/MarginContainer/VBoxContainer"]
+[node name="PitchLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Pitch"]
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Generate"
+text = "Pitch:"
 
-[connection signal="value_changed" from="Parameters/Panel/MarginContainer/VBoxContainer/RotationSlider" to="Parameters" method="_on_rotation_slider_value_changed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/VBoxContainer/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
+[node name="PitchSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/Pitch"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -90.0
+max_value = 90.0
+step = 0.0
+scrollable = false
+
+[node name="PitchResetButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab0/Pitch"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+text = "Reset"
+
+[node name="VBoxContainer" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="BackgroundLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/VBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Background:"
+
+[node name="BackgroundMenu" type="OptionButton" parent="Parameters/Panel/MarginContainer/Tab0/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "Blue Nebulae"
+popup/item_0/id = 0
+popup/item_1/text = "Hazy Nebulae"
+popup/item_1/id = 1
+popup/item_2/text = "Ringed Planet"
+popup/item_2/id = 3
+
+[node name="NoiseSettings" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+text = "
+Noise"
+horizontal_alignment = 1
+
+[node name="Frequency" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+tooltip_text = "Controls the scale of terrain features—higher values create more frequent variation."
+
+[node name="FrequencyLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Frequency"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Frequency:"
+
+[node name="FrequencySlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/Frequency"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.01
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="Octaves" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+tooltip_text = "Adds layers of detail—more octaves increase complexity by stacking additional noise."
+
+[node name="OctavesLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Octaves"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Octaves:"
+
+[node name="OctavesSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/Octaves"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 7.0
+value = 5.0
+scrollable = false
+tick_count = 7
+ticks_on_borders = true
+
+[node name="Lacunarity" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+tooltip_text = "Adjusts the scale between octaves—higher values make each added layer finer."
+
+[node name="LacunarityLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Lacunarity"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Lacunarity:"
+
+[node name="LacunaritySlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/Lacunarity"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 10.0
+step = 0.0
+value = 5.0
+scrollable = false
+
+[node name="_empty2" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="Water" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+text = "
+Water"
+horizontal_alignment = 1
+
+[node name="WaterLevel" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="WaterLevelLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/WaterLevel"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Water Level:"
+
+[node name="WaterLevelSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/WaterLevel"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.9
+max_value = 1.1
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="WaterDepth" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="WaterDepthLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/WaterDepth"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Water Depth:"
+
+[node name="WaterDepthSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/WaterDepth"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 10.0
+max_value = 15.0
+step = 0.0
+value = 10.5
+scrollable = false
+
+[node name="_empty3" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="Erosion" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+
+[node name="ErosionLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Erosion"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Erosion:"
+
+[node name="ErosionAdvanceButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab0/Erosion"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Advance"
+
+[node name="ErosionSimulateButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab0/Erosion"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Simulate"
+
+[node name="ErosionResetButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab0/Erosion"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Reset"
+
+[node name="_empty5" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
+layout_mode = 2
+text = "
+"
+
+[node name="Tab1" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+text = "PLANET GENERATOR
+"
+label_settings = SubResource("LabelSettings_5vw27")
+horizontal_alignment = 1
+
+[node name="AltitudeModifier" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Height Modifier:"
+
+[node name="HeightModifierSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.0
+value = 2.5
+scrollable = false
+
+[node name="_empty2" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Colour1" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Colour1"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Colour 1:"
+
+[node name="Colour1Slider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/Colour1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="Colour1Rect" type="ColorRect" parent="Parameters/Panel/MarginContainer/Tab1/Colour1"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+color = Color(0.890196, 0.882353, 0.345098, 1)
+
+[node name="Colour2" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Colour2"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Colour 2:"
+
+[node name="Colour2Slider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/Colour2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="Colour2Rect" type="ColorRect" parent="Parameters/Panel/MarginContainer/Tab1/Colour2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+color = Color(0.164706, 0.658824, 0.137255, 1)
+
+[node name="Colour3" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Colour3"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Colour 3:"
+
+[node name="Colour3Slider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/Colour3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="Colour3Rect" type="ColorRect" parent="Parameters/Panel/MarginContainer/Tab1/Colour3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+color = Color(0.45098, 0.105882, 0, 1)
+
+[node name="Colour4" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Colour4"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Colour 4:"
+
+[node name="Colour4Slider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/Colour4"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 1.0
+scrollable = false
+
+[node name="Colour4Rect" type="ColorRect" parent="Parameters/Panel/MarginContainer/Tab1/Colour4"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="MainButtons" type="Panel" parent="Parameters/Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -204.0
+offset_top = -43.0
+offset_right = 236.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_272bh")
+
+[node name="TabArrows" type="HBoxContainer" parent="Parameters/Panel/MainButtons"]
+layout_mode = 2
+offset_top = -68.0
+offset_right = 440.0
+offset_bottom = -37.0
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="TabLeft" type="Button" parent="Parameters/Panel/MainButtons/TabArrows"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "<<<"
+
+[node name="TabLabel" type="Label" parent="Parameters/Panel/MainButtons/TabArrows"]
+visible = false
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = " "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TabRight" type="Button" parent="Parameters/Panel/MainButtons/TabArrows"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = ">>>"
+
+[node name="Buttons" type="HBoxContainer" parent="Parameters/Panel/MainButtons"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="GenerateButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Generate
+"
+
+[node name="UpdateButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Update"
+
+[node name="ResetButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Reset"
+
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/Rotation/RotationSlider" to="Parameters" method="_on_rotation_slider_value_changed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Rotation/StopButton" to="Parameters" method="_on_stop_button_pressed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/Pitch/PitchSlider" to="CameraPivot" method="_on_pitch_slider_value_changed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Pitch/PitchResetButton" to="CameraPivot" method="_on_pitch_reset_button_pressed"]
+[connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab0/VBoxContainer/BackgroundMenu" to="Parameters" method="_on_background_menu_item_selected"]
+[connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Frequency/FrequencySlider" to="Parameters" method="_on_frequency_slider_drag_ended"]
+[connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Octaves/OctavesSlider" to="Parameters" method="_on_octaves_slider_drag_ended"]
+[connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Lacunarity/LacunaritySlider" to="Parameters" method="_on_lacunarity_slider_drag_ended"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/WaterLevel/WaterLevelSlider" to="Planet" method="_on_water_level_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/WaterDepth/WaterDepthSlider" to="Planet" method="_on_water_depth_slider_value_changed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionAdvanceButton" to="Planet" method="_on_erosion_advance_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionSimulateButton" to="Planet" method="_on_erosion_simulate_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionResetButton" to="Planet" method="_on_erosion_reset_button_pressed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier/HeightModifierSlider" to="Parameters" method="_on_height_modifier_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour1/Colour1Slider" to="Parameters" method="_on_colour_1_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour2/Colour2Slider" to="Parameters" method="_on_colour_2_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour3/Colour3Slider" to="Parameters" method="_on_colour_3_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour4/Colour4Slider" to="Parameters" method="_on_colour_4_slider_value_changed"]
+[connection signal="pressed" from="Parameters/Panel/MainButtons/TabArrows/TabLeft" to="Parameters" method="_on_tab_left_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MainButtons/TabArrows/TabRight" to="Parameters" method="_on_tab_right_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/UpdateButton" to="Parameters" method="_on_update_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/ResetButton" to="Parameters" method="_on_reset_button_pressed"]
