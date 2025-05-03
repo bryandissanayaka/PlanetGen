@@ -41,8 +41,6 @@ func _ready():
 	color3 = colours[2]
 	color4 = colours[3]
 	reset_colours()
-	pass
-
 
 func reset_labels():
 	rotation_label.text = "Rotation: " + str(snappedf(planet.rotation_speed, 0.01))
@@ -63,8 +61,6 @@ func _on_stop_button_pressed():
 	rotation_slider.value = 0.0
 	planet.rotation_speed = 0.0
 
-
-	
 func _on_background_menu_item_selected(index):
 	match index:
 		0:
@@ -74,7 +70,6 @@ func _on_background_menu_item_selected(index):
 		2:
 			env.environment.sky.sky_material.panorama = RINGED_PLANET
 			env.environment.sky_rotation.y = 2.61799
-
 
 func _on_frequency_slider_drag_ended(value_changed):
 	if value_changed:
@@ -93,7 +88,6 @@ func _on_lacunarity_slider_drag_ended(value_changed):
 		lacunarity_label.text = "Lacunarity: " + str(snappedf(lacunarity_slider.value, 0.01))
 		planet.noise.fractal_lacunarity = lacunarity_slider.value
 		planet.generate(false)
-
 
 func _on_generate_button_pressed():
 	planet.generate(true)
@@ -118,9 +112,6 @@ func _on_reset_button_pressed():
 	reset_colours()
 	planet.generate(false)
 	reset_labels()
-	
-	
-
 
 func _on_tab_right_pressed():
 	%Tab0.visible = false
@@ -175,3 +166,78 @@ func reset_colours():
 	
 	planet.terrain_material.set_shader_parameter("gradient", gradient)
 	pass
+
+func _on_rand_colours_button_pressed():
+	var x = randf_range(0.0, 1.0)
+	_on_colour_1_slider_value_changed(x)
+	%Colour1Slider.value = x
+	
+	x = randf_range(0.0, 1.0)
+	_on_colour_2_slider_value_changed(randf_range(0.0, 1.0))
+	%Colour2Slider.value = x
+	
+	x = randf_range(0.0, 1.0)
+	_on_colour_3_slider_value_changed(randf_range(0.0, 1.0))
+	%Colour3Slider.value = x
+	
+	x = randf_range(0.0, 1.0)
+	_on_colour_4_slider_value_changed(randf_range(0.0, 1.0))
+	%Colour4Slider.value = x
+
+func _on_reset_colours_button_pressed():
+	reset_colours()
+
+func _on_option_button_item_selected(index):
+	var t: GradientTexture1D = planet.terrain_material.get_shader_parameter("gradient")
+	var w: GradientTexture1D = planet.water_material.get_shader_parameter("gradient")
+	t.gradient.interpolation_mode = index
+	w.gradient.interpolation_mode = index
+	planet.terrain_material.set_shader_parameter("gradient", t)
+	planet.water_material.set_shader_parameter("gradient", w)
+
+func _on_detail_slider_value_changed(value):
+	planet.detail = value
+	planet.generate(false)
+	%DetailLabel.text = "Detail: "+str(int(value))
+
+func _on_save_pressed():
+	var save_file = FileAccess.open("user://planet.save", FileAccess.WRITE)
+	var save_dict = planet.get_data()
+	var json_string = JSON.stringify(save_dict)
+	save_file.store_line(json_string)
+	print(json_string)
+	
+func _on_import_pressed():
+	if not FileAccess.file_exists("user://planet.save"):
+		return
+	var save_file = FileAccess.open("user://planet.save", FileAccess.READ)
+	var json_string = save_file.get_line()
+	var json = JSON.new()
+	var parse_result = json.parse(json_string)
+	if not parse_result == OK:
+		return
+	var data = json.data
+	planet.import_data(data)
+	frequency_slider.value = data["frequency"]
+	frequency_label.text = "Frequency: " + str(snappedf(frequency_slider.value, 0.01))
+	octaves_slider.value = data["octaves"]
+	octaves_label.text = "Octaves: " + str(int(octaves_slider.value))	
+	lacunarity_slider.value = data["lacunarity"]
+	lacunarity_label.text = "Lacunarity: " + str(snappedf(lacunarity_slider.value, 0.01))
+	%WaterLevelSlider.value = data["water_level"]
+	%WaterDepthSlider.value = data["water_depth"]
+	%DetailSlider.value = data["detail"]
+	%DetailLabel.text = "Detail: "+str(int(%DetailSlider.value))
+	%HeightModifierSlider.value = data["height_modifier"]
+	%Colour1Slider.value = data["colour1"]
+	%Colour2Slider.value = data["colour2"]
+	%Colour3Slider.value = data["colour3"]
+	%Colour4Slider.value = data["colour4"]
+	var colours = planet.terrain_material.get_shader_parameter("gradient").gradient.colors
+	%Colour1Rect.color = colours[0]
+	%Colour2Rect.color = colours[1]
+	%Colour3Rect.color = colours[2]
+	%Colour4Rect.color = colours[3]
+	planet._on_erosion_reset_button_pressed()
+	
+	

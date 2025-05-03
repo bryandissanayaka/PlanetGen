@@ -1,12 +1,12 @@
 [gd_scene load_steps=21 format=3 uid="uid://bxfomhc8d0je3"]
 
-[ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://planet.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://scripts/planet.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://7ki8g0702dfi" path="res://backgrounds/hazy_nebulae_1.png" id="1_lquwl"]
-[ext_resource type="Script" uid="uid://hevkdf8sy6g7" path="res://parameters.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://hevkdf8sy6g7" path="res://scripts/parameters.gd" id="2_0xm2m"]
 [ext_resource type="Shader" uid="uid://buadbseghxws6" path="res://shaders/terrain.gdshader" id="2_h2yge"]
 [ext_resource type="Shader" uid="uid://c52dgl78i4wij" path="res://shaders/water.gdshader" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://c00kgit3xi5k" path="res://shaders/terrain_height_gradient.tres" id="4_272bh"]
-[ext_resource type="Script" uid="uid://i6jl6nfieqfr" path="res://camera.gd" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://i6jl6nfieqfr" path="res://scripts/camera.gd" id="5_7mycd"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7mycd"]
 panorama = ExtResource("1_lquwl")
@@ -27,12 +27,12 @@ sdfgi_bounce_feedback = 1.99
 glow_enabled = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0xm2m"]
-frequency = 0.5
+frequency = 1.0
 fractal_lacunarity = 3.0
 
 [sub_resource type="Gradient" id="Gradient_7mycd"]
-offsets = PackedFloat32Array(0, 0.273885, 0.573248, 0.757962, 0.866242)
-colors = PackedColorArray(0.235294, 0.760784, 0.831373, 1, 0.00392157, 0.419608, 0.431373, 1, 0, 0.737255, 0.352941, 1, 0.353209, 0.286783, 0.138444, 1, 0.815686, 0.698039, 0.443137, 1)
+offsets = PackedFloat32Array(0.140351, 0.165775, 0.31016, 0.757962, 0.866242)
+colors = PackedColorArray(0.83, 0.83, 0.83, 1, 0.00582555, 0.519955, 0.534212, 1, 0, 0.737255, 0.352941, 1, 0.353209, 0.286783, 0.138444, 1, 0.815686, 0.698039, 0.443137, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_272bh"]
 gradient = SubResource("Gradient_7mycd")
@@ -47,7 +47,7 @@ shader_parameter/radius = 10.0
 shader_parameter/height = 2.5
 shader_parameter/gradient = ExtResource("4_272bh")
 shader_parameter/climate_gradient = SubResource("GradientTexture1D_272bh")
-shader_parameter/climate_strength = 0.0
+shader_parameter/climate_strength = 0.5
 
 [sub_resource type="Gradient" id="Gradient_1bvp3"]
 offsets = PackedFloat32Array(0, 0.227586, 0.572414, 0.941379)
@@ -66,7 +66,8 @@ shader_parameter/level = 10.5
 shader_parameter/gradient = SubResource("GradientTexture1D_lquwl")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1bvp3"]
-bg_color = Color(0, 0, 0, 0.639216)
+bg_color = Color(1, 0, 0.516667, 0)
+draw_center = false
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
@@ -145,9 +146,9 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = -32.0
-offset_top = 32.0
+offset_top = 67.0
 offset_right = 504.0
-offset_bottom = -32.0
+offset_bottom = -67.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1bvp3")
 
@@ -161,11 +162,10 @@ grow_vertical = 2
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_bottom = 48
 
 [node name="Tab0" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -195,6 +195,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 min_value = -1.0
 max_value = 1.0
 step = 0.0
@@ -221,8 +222,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-min_value = -90.0
-max_value = 90.0
+focus_mode = 0
+min_value = -50.0
+max_value = 50.0
 step = 0.0
 scrollable = false
 
@@ -231,15 +233,15 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 text = "Reset"
 
-[node name="VBoxContainer" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
+[node name="Background" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
 
-[node name="BackgroundLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/VBoxContainer"]
+[node name="BackgroundLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Background"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 text = "Background:"
 
-[node name="BackgroundMenu" type="OptionButton" parent="Parameters/Panel/MarginContainer/Tab0/VBoxContainer"]
+[node name="BackgroundMenu" type="OptionButton" parent="Parameters/Panel/MarginContainer/Tab0/Background"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -260,7 +262,7 @@ horizontal_alignment = 1
 
 [node name="Frequency" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
-tooltip_text = "Controls the scale of terrain features—higher values create more frequent variation."
+tooltip_text = "Controls the scale of terrain features - higher values create more frequent variation."
 
 [node name="FrequencyLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Frequency"]
 unique_name_in_owner = true
@@ -273,6 +275,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 min_value = 0.01
 max_value = 1.0
 step = 0.0
@@ -281,7 +284,7 @@ scrollable = false
 
 [node name="Octaves" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
-tooltip_text = "Adds layers of detail—more octaves increase complexity by stacking additional noise."
+tooltip_text = "Adds layers of detail - more octaves increase complexity by stacking additional noise."
 
 [node name="OctavesLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Octaves"]
 unique_name_in_owner = true
@@ -294,6 +297,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 min_value = 1.0
 max_value = 7.0
 value = 5.0
@@ -303,7 +307,7 @@ ticks_on_borders = true
 
 [node name="Lacunarity" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
-tooltip_text = "Adjusts the scale between octaves—higher values make each added layer finer."
+tooltip_text = "Adjusts the scale between octaves - higher values make each added layer finer."
 
 [node name="LacunarityLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/Lacunarity"]
 unique_name_in_owner = true
@@ -316,13 +320,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 max_value = 10.0
 step = 0.0
 value = 5.0
 scrollable = false
-
-[node name="_empty2" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
-layout_mode = 2
 
 [node name="Water" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
@@ -336,13 +338,14 @@ layout_mode = 2
 [node name="WaterLevelLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/WaterLevel"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Water Level:"
+text = "Level:"
 
 [node name="WaterLevelSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/WaterLevel"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 min_value = 0.9
 max_value = 1.1
 step = 0.0
@@ -355,13 +358,14 @@ layout_mode = 2
 [node name="WaterDepthLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab0/WaterDepth"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Water Depth:"
+text = "Depth:"
 
 [node name="WaterDepthSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab0/WaterDepth"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 min_value = 10.0
 max_value = 15.0
 step = 0.0
@@ -402,11 +406,10 @@ text = "Reset"
 
 [node name="_empty5" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
-text = "
-"
 
 [node name="Tab1" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -416,20 +419,51 @@ text = "PLANET GENERATOR
 "
 label_settings = SubResource("LabelSettings_5vw27")
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="AltitudeModifier" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+[node name="TerrainSettings" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
+text = "Terrain Settings"
+horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier"]
+[node name="Detail" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+tooltip_text = "The number of radial segments for the sphere's mesh - a higher value will result in a significantly higher time to generate. "
+
+[node name="DetailLabel" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Detail"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Height Modifier:"
+text = "Detail: 256"
 
-[node name="HeightModifierSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier"]
+[node name="DetailSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/Detail"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
+min_value = 64.0
+max_value = 1024.0
+step = 64.0
+value = 256.0
+scrollable = false
+tick_count = 16
+ticks_on_borders = true
+
+[node name="HeightModifier" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/HeightModifier"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Height Modifier:"
+
+[node name="HeightModifierSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/HeightModifier"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
 max_value = 5.0
 step = 0.0
 value = 2.5
@@ -437,6 +471,11 @@ scrollable = false
 
 [node name="_empty2" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
+
+[node name="Colours" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+text = "Colours"
+horizontal_alignment = 1
 
 [node name="Colour1" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
@@ -451,6 +490,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 max_value = 1.0
 step = 0.0
 value = 1.0
@@ -475,6 +515,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 max_value = 1.0
 step = 0.0
 value = 1.0
@@ -499,6 +540,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 max_value = 1.0
 step = 0.0
 value = 1.0
@@ -523,6 +565,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+focus_mode = 0
 max_value = 1.0
 step = 0.0
 value = 1.0
@@ -533,23 +576,78 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="MainButtons" type="Panel" parent="Parameters/Panel"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -204.0
-offset_top = -43.0
-offset_right = 236.0
-offset_bottom = -43.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_vertical = 6
+[node name="_empty4" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="RandomiseReset" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="RandColoursButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/RandomiseReset"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Randomise
+"
+
+[node name="ResetColoursButton" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/RandomiseReset"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Reset"
+
+[node name="Interpolation" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Interpolation"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Interpolation: "
+
+[node name="OptionButton" type="OptionButton" parent="Parameters/Panel/MarginContainer/Tab1/Interpolation"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "Linear"
+popup/item_0/id = 0
+popup/item_1/text = "Constant"
+popup/item_1/id = 1
+popup/item_2/text = "Cubic"
+popup/item_2/id = 2
+
+[node name="_empty3" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+text = "
+"
+
+[node name="ImportSave" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="Import" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/ImportSave"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Import"
+
+[node name="Save" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/ImportSave"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Save"
+
+[node name="MainButtons" type="Panel" parent="Parameters/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 10
 theme_override_styles/panel = SubResource("StyleBoxFlat_272bh")
 
-[node name="TabArrows" type="HBoxContainer" parent="Parameters/Panel/MainButtons"]
+[node name="TabArrows" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
 layout_mode = 2
 offset_top = -68.0
 offset_right = 440.0
@@ -557,13 +655,13 @@ offset_bottom = -37.0
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="TabLeft" type="Button" parent="Parameters/Panel/MainButtons/TabArrows"]
+[node name="TabLeft" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "<<<"
 
-[node name="TabLabel" type="Label" parent="Parameters/Panel/MainButtons/TabArrows"]
+[node name="TabLabel" type="Label" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
 visible = false
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
@@ -571,13 +669,13 @@ text = " "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TabRight" type="Button" parent="Parameters/Panel/MainButtons/TabArrows"]
+[node name="TabRight" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = ">>>"
 
-[node name="Buttons" type="HBoxContainer" parent="Parameters/Panel/MainButtons"]
+[node name="Buttons" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -589,20 +687,20 @@ grow_vertical = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="GenerateButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+[node name="GenerateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Generate
 "
 
-[node name="UpdateButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+[node name="UpdateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Update"
 
-[node name="ResetButton" type="Button" parent="Parameters/Panel/MainButtons/Buttons"]
+[node name="ResetButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
@@ -612,7 +710,7 @@ text = "Reset"
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Rotation/StopButton" to="Parameters" method="_on_stop_button_pressed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/Pitch/PitchSlider" to="CameraPivot" method="_on_pitch_slider_value_changed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Pitch/PitchResetButton" to="CameraPivot" method="_on_pitch_reset_button_pressed"]
-[connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab0/VBoxContainer/BackgroundMenu" to="Parameters" method="_on_background_menu_item_selected"]
+[connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab0/Background/BackgroundMenu" to="Parameters" method="_on_background_menu_item_selected"]
 [connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Frequency/FrequencySlider" to="Parameters" method="_on_frequency_slider_drag_ended"]
 [connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Octaves/OctavesSlider" to="Parameters" method="_on_octaves_slider_drag_ended"]
 [connection signal="drag_ended" from="Parameters/Panel/MarginContainer/Tab0/Lacunarity/LacunaritySlider" to="Parameters" method="_on_lacunarity_slider_drag_ended"]
@@ -621,13 +719,19 @@ text = "Reset"
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionAdvanceButton" to="Planet" method="_on_erosion_advance_button_pressed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionSimulateButton" to="Planet" method="_on_erosion_simulate_button_pressed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionResetButton" to="Planet" method="_on_erosion_reset_button_pressed"]
-[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/AltitudeModifier/HeightModifierSlider" to="Parameters" method="_on_height_modifier_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Detail/DetailSlider" to="Parameters" method="_on_detail_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/HeightModifier/HeightModifierSlider" to="Parameters" method="_on_height_modifier_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour1/Colour1Slider" to="Parameters" method="_on_colour_1_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour2/Colour2Slider" to="Parameters" method="_on_colour_2_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour3/Colour3Slider" to="Parameters" method="_on_colour_3_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour4/Colour4Slider" to="Parameters" method="_on_colour_4_slider_value_changed"]
-[connection signal="pressed" from="Parameters/Panel/MainButtons/TabArrows/TabLeft" to="Parameters" method="_on_tab_left_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MainButtons/TabArrows/TabRight" to="Parameters" method="_on_tab_right_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/UpdateButton" to="Parameters" method="_on_update_button_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MainButtons/Buttons/ResetButton" to="Parameters" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/RandomiseReset/RandColoursButton" to="Parameters" method="_on_rand_colours_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/RandomiseReset/ResetColoursButton" to="Parameters" method="_on_reset_colours_button_pressed"]
+[connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab1/Interpolation/OptionButton" to="Parameters" method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/ImportSave/Import" to="Parameters" method="_on_import_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/ImportSave/Save" to="Parameters" method="_on_save_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabArrows/TabLeft" to="Parameters" method="_on_tab_left_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabArrows/TabRight" to="Parameters" method="_on_tab_right_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/UpdateButton" to="Parameters" method="_on_update_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/ResetButton" to="Parameters" method="_on_reset_button_pressed"]

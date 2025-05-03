@@ -7,12 +7,13 @@ var target_pitch := 0.0
 var target_fov := 60.0
 
 func _ready():
-	panel.position.x = -1600.0
+	#panel.position.x = -1600.0
+	pass
 
 func _process(delta):
 	env.environment.sky_rotation.y += delta * 0.0125
 	#camera.rotation.x = lerpf(rotation.x, 0.0, delta * 2)
-	panel.position.x = lerpf(panel.position.x, -32.0, delta * 5)
+	#panel.position.x = lerpf(panel.position.x, -32.0, delta * 5)
 	rotation_degrees.x = lerpf(rotation_degrees.x, target_pitch, 3.5 * delta)
 	
 	if Input.is_action_just_pressed("zoom_in"):

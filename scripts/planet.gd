@@ -75,10 +75,6 @@ func _process(delta):
 
 
 
-
-
-
-
 # should move these to parameters.gd
 
 func _on_water_level_slider_value_changed(value):
@@ -117,3 +113,40 @@ func _on_erosion_simulate_button_pressed():
 		%ErosionAdvanceButton.disabled = false
 		%ErosionSimulateButton.disabled = false
 		%ErosionResetButton.disabled = false
+		
+		
+func get_data() -> Dictionary:
+	var colours = terrain_material.get_shader_parameter("gradient").gradient.colors
+	var dict = {
+		"seed" : noise.seed,
+		"frequency" : noise.frequency,
+		"octaves" : noise.fractal_octaves,
+		"lacunarity" : noise.fractal_lacunarity,
+		"water_level" : $Water.scale.x,
+		"water_depth" : water_material.get_shader_parameter("level"),
+		"detail" : detail,
+		"height_modifier" : terrain_material.get_shader_parameter("height"),
+		"colour1" : colours[0].h,
+		"colour2" : colours[1].h,
+		"colour3" : colours[2].h,
+		"colour4" : colours[3].h,
+	}
+	return dict
+
+func import_data(data: Dictionary):
+	noise.seed = data["seed"]
+	noise.frequency = data["frequency"]
+	noise.fractal_octaves = data["octaves"]
+	noise.fractal_lacunarity = data["lacunarity"]
+	$Water.scale = data["water_level"] * Vector3.ONE
+	water_material.set_shader_parameter("level", data["water_depth"])
+	detail = data["detail"]
+	terrain_material.set_shader_parameter("height", data["height_modifier"])
+	var gradient = terrain_material.get_shader_parameter("gradient")
+	gradient.gradient.colors[0].h = data["colour1"]
+	gradient.gradient.colors[1].h = data["colour2"]
+	gradient.gradient.colors[2].h = data["colour3"]
+	gradient.gradient.colors[3].h = data["colour4"]
+	terrain_material.set_shader_parameter("gradient", gradient)
+	generate(false)
+	
