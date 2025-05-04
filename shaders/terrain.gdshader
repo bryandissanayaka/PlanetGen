@@ -17,19 +17,11 @@ void vertex() {
 void fragment() {
 	SPECULAR = specular;
 	ROUGHNESS = roughness;
-
-	//float color_uv = (length(world_vertex.xyz) - radius) / height;
-	//ALBEDO = texture(gradient, vec2(color_uv, 0.0)).rgb;
-	
-
     float alt_uv = (length(world_vertex.xyz) - radius) / height;
     vec3 base_color = texture(gradient, vec2(alt_uv, 0.0)).rgb;
-
     vec3 pos_n = normalize(world_vertex.xyz);
     float lat_factor = 1.0 - abs(pos_n.y);
-
     vec3 climate_color = texture(climate_gradient, vec2(lat_factor, 0.0)).rgb;
-
-
     ALBEDO = mix(base_color, climate_color, climate_strength);
 }
+

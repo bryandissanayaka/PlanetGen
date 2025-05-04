@@ -18,7 +18,6 @@ extends Control
 
 const BLUE_NEBULAE = preload("res://backgrounds/blue_nebulae_1.png")
 const HAZY_NEBULAE = preload("res://backgrounds/hazy_nebulae_1.png")
-const PLAIN_STARFIELD = preload("res://backgrounds/plain_starfield_1.png")
 const RINGED_PLANET = preload("res://backgrounds/ringed_gas_giant_planet.png")
 
 var defaults: Dictionary
@@ -110,6 +109,8 @@ func _on_reset_button_pressed():
 	planet.terrain_material.set_shader_parameter("height", 2.5)
 	%HeightModifierSlider.value = 2.5
 	reset_colours()
+	_on_climate_reset_pressed()
+	
 	planet.generate(false)
 	reset_labels()
 
@@ -200,24 +201,51 @@ func _on_detail_slider_value_changed(value):
 	planet.generate(false)
 	%DetailLabel.text = "Detail: "+str(int(value))
 
+var files = []
+
 func _on_save_pressed():
-	var save_file = FileAccess.open("user://planet.save", FileAccess.WRITE)
+	var n = %PlanetName.text
+	if not n:
+		n = "planet"
+	var path = "user://saves/"+n+".planet"
+	var save_file = FileAccess.open(path, FileAccess.WRITE)
 	var save_dict = planet.get_data()
 	var json_string = JSON.stringify(save_dict)
 	save_file.store_line(json_string)
-	print(json_string)
 	
+	
+
 func _on_import_pressed():
-	if not FileAccess.file_exists("user://planet.save"):
-		return
-	var save_file = FileAccess.open("user://planet.save", FileAccess.READ)
+	var selected = %Import.selected
+	files.clear()
+	%Import.clear()
+	var dir = DirAccess.open("user://saves")
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	#%Import.add_item("")
+	while file_name != "":
+		if file_name.ends_with(".planet"):
+			files.append(file_name)
+			%Import.add_item(file_name)
+		file_name = dir.get_next()
+	%Import.select(selected)
+
+func _on_import_item_selected(index):
+	var path = "user://saves/"+files[index]
+	var save_file = FileAccess.open(path, FileAccess.READ)
 	var json_string = save_file.get_line()
 	var json = JSON.new()
 	var parse_result = json.parse(json_string)
 	if not parse_result == OK:
 		return
 	var data = json.data
-	planet.import_data(data)
+	var success = planet.import_data(data)
+	%PlanetName.text = files[index].trim_suffix(".planet")
+	%Import.clear()
+	if not success:
+		%Extras.error_msg("Error importing planet!")
+		return
+	
 	frequency_slider.value = data["frequency"]
 	frequency_label.text = "Frequency: " + str(snappedf(frequency_slider.value, 0.01))
 	octaves_slider.value = data["octaves"]
@@ -238,6 +266,16 @@ func _on_import_pressed():
 	%Colour2Rect.color = colours[1]
 	%Colour3Rect.color = colours[2]
 	%Colour4Rect.color = colours[3]
+	%ClimateSlider.value = data["climate_strength"]
 	planet._on_erosion_reset_button_pressed()
 	
-	
+
+
+
+func _on_climate_slider_value_changed(value):
+	planet.terrain_material.set_shader_parameter("climate_strength", value)
+
+
+func _on_climate_reset_pressed():
+	planet.terrain_material.set_shader_parameter("climate_strength", 0.5)
+	%ClimateSlider.value = 0.5

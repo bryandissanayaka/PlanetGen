@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bxfomhc8d0je3"]
+[gd_scene load_steps=22 format=3 uid="uid://bxfomhc8d0je3"]
 
 [ext_resource type="Script" uid="uid://cbxteaswddf8j" path="res://scripts/planet.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://7ki8g0702dfi" path="res://backgrounds/hazy_nebulae_1.png" id="1_lquwl"]
@@ -7,24 +7,7 @@
 [ext_resource type="Shader" uid="uid://c52dgl78i4wij" path="res://shaders/water.gdshader" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://c00kgit3xi5k" path="res://shaders/terrain_height_gradient.tres" id="4_272bh"]
 [ext_resource type="Script" uid="uid://i6jl6nfieqfr" path="res://scripts/camera.gd" id="5_7mycd"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7mycd"]
-panorama = ExtResource("1_lquwl")
-
-[sub_resource type="Sky" id="Sky_272bh"]
-sky_material = SubResource("PanoramaSkyMaterial_7mycd")
-
-[sub_resource type="Environment" id="Environment_h2yge"]
-background_mode = 2
-background_color = Color(0.00183333, 0, 0.01, 1)
-sky = SubResource("Sky_272bh")
-sky_rotation = Vector3(0, 2.61799, 0)
-ambient_light_source = 2
-ambient_light_color = Color(0.122252, 0.122252, 0.122252, 1)
-tonemap_mode = 2
-sdfgi_read_sky_light = false
-sdfgi_bounce_feedback = 1.99
-glow_enabled = true
+[ext_resource type="Script" uid="uid://bag2rsl8b3m72" path="res://scripts/extras.gd" id="8_5vw27"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0xm2m"]
 frequency = 1.0
@@ -97,15 +80,25 @@ expand_margin_top = 22.0
 expand_margin_right = 6.0
 expand_margin_bottom = 22.0
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7mycd"]
+panorama = ExtResource("1_lquwl")
+
+[sub_resource type="Sky" id="Sky_272bh"]
+sky_material = SubResource("PanoramaSkyMaterial_7mycd")
+
+[sub_resource type="Environment" id="Environment_h2yge"]
+background_mode = 2
+background_color = Color(0.00183333, 0, 0.01, 1)
+sky = SubResource("Sky_272bh")
+sky_rotation = Vector3(0, 2.61799, 0)
+ambient_light_source = 2
+ambient_light_color = Color(0.122252, 0.122252, 0.122252, 1)
+tonemap_mode = 2
+sdfgi_read_sky_light = false
+sdfgi_bounce_feedback = 1.99
+glow_enabled = true
+
 [node name="Main" type="Node3D"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_h2yge")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.707107, -0.270598, 0.653281, 0, 0.92388, 0.382683, -0.707107, -0.270598, 0.653281, 0, 0, 0)
-light_energy = 0.6
-shadow_enabled = true
 
 [node name="Planet" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -146,9 +139,9 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = -32.0
-offset_top = 67.0
+offset_top = 45.0
 offset_right = 504.0
-offset_bottom = -67.0
+offset_bottom = -45.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1bvp3")
 
@@ -166,12 +159,13 @@ theme_override_constants/margin_bottom = 48
 
 [node name="Tab0" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Parameters/Panel/MarginContainer/Tab0"]
 layout_mode = 2
-text = "PLANET GENERATOR
+text = "PlanetGen
 "
 label_settings = SubResource("LabelSettings_5vw27")
 horizontal_alignment = 1
@@ -409,13 +403,12 @@ layout_mode = 2
 
 [node name="Tab1" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
-text = "PLANET GENERATOR
+text = "PlanetGen
 "
 label_settings = SubResource("LabelSettings_5vw27")
 horizontal_alignment = 1
@@ -468,6 +461,31 @@ max_value = 5.0
 step = 0.0
 value = 2.5
 scrollable = false
+
+[node name="ClimateStrength" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/ClimateStrength"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Climate Strength:"
+
+[node name="ClimateSlider" type="HSlider" parent="Parameters/Panel/MarginContainer/Tab1/ClimateStrength"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_mode = 0
+max_value = 1.0
+step = 0.0
+value = 0.5
+scrollable = false
+
+[node name="ClimateReset" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/ClimateStrength"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_vertical = 4
+text = " Reset"
 
 [node name="_empty2" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
@@ -622,19 +640,18 @@ popup/item_2/id = 2
 
 [node name="_empty3" type="Label" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
-text = "
-"
 
 [node name="ImportSave" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="Import" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/ImportSave"]
+[node name="PlanetName" type="LineEdit" parent="Parameters/Panel/MarginContainer/Tab1/ImportSave"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-focus_mode = 0
-text = "Import"
+focus_mode = 1
+placeholder_text = "Name your planet"
 
 [node name="Save" type="Button" parent="Parameters/Panel/MarginContainer/Tab1/ImportSave"]
 layout_mode = 2
@@ -642,12 +659,32 @@ size_flags_horizontal = 3
 focus_mode = 0
 text = "Save"
 
+[node name="Import" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/Tab1"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Parameters/Panel/MarginContainer/Tab1/Import"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Load Planet: "
+
+[node name="Import" type="OptionButton" parent="Parameters/Panel/MarginContainer/Tab1/Import"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+clip_text = true
+fit_to_longest_item = false
+allow_reselect = true
+
 [node name="MainButtons" type="Panel" parent="Parameters/Panel/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_styles/panel = SubResource("StyleBoxFlat_272bh")
 
-[node name="TabArrows" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
+[node name="TabButtons" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
 layout_mode = 2
 offset_top = -68.0
 offset_right = 440.0
@@ -655,13 +692,13 @@ offset_bottom = -37.0
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="TabLeft" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
+[node name="TabLeft" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "<<<"
 
-[node name="TabLabel" type="Label" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
+[node name="TabLabel" type="Label" parent="Parameters/Panel/MarginContainer/MainButtons/TabButtons"]
 visible = false
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
@@ -669,13 +706,13 @@ text = " "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TabRight" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabArrows"]
+[node name="TabRight" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/TabButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = ">>>"
 
-[node name="Buttons" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
+[node name="CreateButtons" type="HBoxContainer" parent="Parameters/Panel/MarginContainer/MainButtons"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -687,24 +724,105 @@ grow_vertical = 2
 size_flags_vertical = 8
 theme_override_constants/separation = 16
 
-[node name="GenerateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
+[node name="GenerateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/CreateButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Generate
 "
 
-[node name="UpdateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
+[node name="UpdateButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/CreateButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Update"
 
-[node name="ResetButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/Buttons"]
+[node name="ResetButton" type="Button" parent="Parameters/Panel/MarginContainer/MainButtons/CreateButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 text = "Reset"
+
+[node name="Extras" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 800.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_5vw27")
+
+[node name="FPS" type="Label" parent="Extras"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -329.0
+offset_top = 61.0
+offset_right = -55.0
+offset_bottom = 87.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "FPS: "
+horizontal_alignment = 2
+
+[node name="Primitives" type="Label" parent="Extras"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -433.0
+offset_top = 87.0
+offset_right = -55.0
+offset_bottom = 113.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "Vertices: "
+horizontal_alignment = 2
+
+[node name="VRAM" type="Label" parent="Extras"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -433.0
+offset_top = 113.0
+offset_right = -55.0
+offset_bottom = 139.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 18
+text = "VRAM: "
+horizontal_alignment = 2
+
+[node name="Errors" type="Label" parent="Extras"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -443.0
+offset_top = 148.0
+offset_right = -55.0
+offset_bottom = 213.0
+grow_horizontal = 0
+horizontal_alignment = 2
+uppercase = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h2yge")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.270598, 0.653282, 0, 0.92388, 0.382683, -0.707107, -0.270598, 0.653282, 0, 0, 0)
+light_energy = 0.6
+shadow_enabled = true
 
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab0/Rotation/RotationSlider" to="Parameters" method="_on_rotation_slider_value_changed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Rotation/StopButton" to="Parameters" method="_on_stop_button_pressed"]
@@ -721,6 +839,8 @@ text = "Reset"
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab0/Erosion/ErosionResetButton" to="Planet" method="_on_erosion_reset_button_pressed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Detail/DetailSlider" to="Parameters" method="_on_detail_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/HeightModifier/HeightModifierSlider" to="Parameters" method="_on_height_modifier_slider_value_changed"]
+[connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/ClimateStrength/ClimateSlider" to="Parameters" method="_on_climate_slider_value_changed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/ClimateStrength/ClimateReset" to="Parameters" method="_on_climate_reset_pressed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour1/Colour1Slider" to="Parameters" method="_on_colour_1_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour2/Colour2Slider" to="Parameters" method="_on_colour_2_slider_value_changed"]
 [connection signal="value_changed" from="Parameters/Panel/MarginContainer/Tab1/Colour3/Colour3Slider" to="Parameters" method="_on_colour_3_slider_value_changed"]
@@ -728,10 +848,11 @@ text = "Reset"
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/RandomiseReset/RandColoursButton" to="Parameters" method="_on_rand_colours_button_pressed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/RandomiseReset/ResetColoursButton" to="Parameters" method="_on_reset_colours_button_pressed"]
 [connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab1/Interpolation/OptionButton" to="Parameters" method="_on_option_button_item_selected"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/ImportSave/Import" to="Parameters" method="_on_import_pressed"]
 [connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/ImportSave/Save" to="Parameters" method="_on_save_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabArrows/TabLeft" to="Parameters" method="_on_tab_left_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabArrows/TabRight" to="Parameters" method="_on_tab_right_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/UpdateButton" to="Parameters" method="_on_update_button_pressed"]
-[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/Buttons/ResetButton" to="Parameters" method="_on_reset_button_pressed"]
+[connection signal="item_selected" from="Parameters/Panel/MarginContainer/Tab1/Import/Import" to="Parameters" method="_on_import_item_selected"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/Tab1/Import/Import" to="Parameters" method="_on_import_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabButtons/TabLeft" to="Parameters" method="_on_tab_left_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/TabButtons/TabRight" to="Parameters" method="_on_tab_right_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/CreateButtons/GenerateButton" to="Parameters" method="_on_generate_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/CreateButtons/UpdateButton" to="Parameters" method="_on_update_button_pressed"]
+[connection signal="pressed" from="Parameters/Panel/MarginContainer/MainButtons/CreateButtons/ResetButton" to="Parameters" method="_on_reset_button_pressed"]

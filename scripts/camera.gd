@@ -26,7 +26,6 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("reload"):
 		get_tree().reload_current_scene()
-		
 
 
 func _on_pitch_slider_value_changed(value):

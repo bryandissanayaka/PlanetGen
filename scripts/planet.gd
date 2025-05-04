@@ -31,7 +31,7 @@ func generate(randomise: bool):
 		noise.seed = randi()
 	generate_terrain()
 	generate_water()
-	pass
+	%Extras.update_primitives()
 
 func generate_sphere(r, d) -> Array:
 	var sphere := SphereMesh.new()
@@ -56,7 +56,6 @@ func generate_terrain():
 	terrain_mesh.clear_surfaces()
 	terrain_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)
 	terrain_mesh.surface_set_material(0, terrain_material)
-	
 
 func generate_water():
 	if water_level == 0.0:
@@ -69,6 +68,8 @@ func generate_water():
 	water_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, mesh_arrays)	
 	
 	water_mesh.surface_set_material(0, water_material)
+	
+	
 func _process(delta):
 	rotate_y(delta * rotation_speed)
 
@@ -115,6 +116,21 @@ func _on_erosion_simulate_button_pressed():
 		%ErosionResetButton.disabled = false
 		
 		
+var keys = [
+  "seed",
+  "frequency",
+  "octaves",
+  "lacunarity",
+  "water_level",
+  "water_depth",
+  "detail",
+  "height_modifier",
+  "colour1",
+  "colour2",
+  "colour3",
+  "colour4",
+  "climate_strength"
+]
 func get_data() -> Dictionary:
 	var colours = terrain_material.get_shader_parameter("gradient").gradient.colors
 	var dict = {
@@ -130,10 +146,14 @@ func get_data() -> Dictionary:
 		"colour2" : colours[1].h,
 		"colour3" : colours[2].h,
 		"colour4" : colours[3].h,
+		"climate_strength" : terrain_material.get_shader_parameter("climate_strength")
 	}
 	return dict
 
-func import_data(data: Dictionary):
+func import_data(data: Dictionary) -> bool:
+	for key in keys:
+		if not data.has(key):
+			return false
 	noise.seed = data["seed"]
 	noise.frequency = data["frequency"]
 	noise.fractal_octaves = data["octaves"]
@@ -148,5 +168,6 @@ func import_data(data: Dictionary):
 	gradient.gradient.colors[2].h = data["colour3"]
 	gradient.gradient.colors[3].h = data["colour4"]
 	terrain_material.set_shader_parameter("gradient", gradient)
+	terrain_material.set_shader_parameter("climate_strength", data["climate_strength"])
 	generate(false)
-	
+	return true

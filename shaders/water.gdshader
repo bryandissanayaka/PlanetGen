@@ -2,8 +2,8 @@ shader_type spatial;
 
 uniform float specular = 0.9;
 uniform float roughness = 0.3;
-uniform float radius = 10.0; // ADD PASSING THIS FROM PLANET.GD
-uniform float level = 10.0; // value of water_radius
+uniform float radius = 10.0;
+uniform float level = 10.0;
 uniform sampler2D gradient: repeat_disable;
 uniform sampler2D depth_texture: hint_depth_texture, repeat_disable;
 
@@ -14,7 +14,6 @@ float get_linear_depth(vec2 uv, mat4 inv_projection_matrix) {
 	return pixel_position.z;
 }
 
-
 void fragment() {
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
@@ -22,3 +21,5 @@ void fragment() {
 	float color_uv = depth_difference / (level - radius);
 	ALBEDO = texture(gradient, vec2(color_uv, 0.0)).rgb;
 }
+
+
