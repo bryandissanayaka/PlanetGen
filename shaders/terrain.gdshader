@@ -24,4 +24,3 @@ void fragment() {
     vec3 climate_color = texture(climate_gradient, vec2(lat_factor, 0.0)).rgb;
     ALBEDO = mix(base_color, climate_color, climate_strength);
 }
-
