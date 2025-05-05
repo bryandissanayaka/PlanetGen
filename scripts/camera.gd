@@ -6,14 +6,8 @@ extends Node3D
 var target_pitch := 0.0
 var target_fov := 60.0
 
-func _ready():
-	#panel.position.x = -1600.0
-	pass
-
 func _process(delta):
 	env.environment.sky_rotation.y += delta * 0.0125
-	#camera.rotation.x = lerpf(rotation.x, 0.0, delta * 2)
-	#panel.position.x = lerpf(panel.position.x, -32.0, delta * 5)
 	rotation_degrees.x = lerpf(rotation_degrees.x, target_pitch, 3.5 * delta)
 	
 	if Input.is_action_just_pressed("zoom_in"):
@@ -22,7 +16,6 @@ func _process(delta):
 		target_fov += 5.0
 	target_fov = clampf(target_fov, 20, 60)
 	camera.fov = lerpf(camera.fov, target_fov, 4.0 * delta)
-	
 	
 	if Input.is_action_just_pressed("reload"):
 		get_tree().reload_current_scene()

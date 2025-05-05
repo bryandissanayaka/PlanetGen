@@ -10,8 +10,8 @@
 [ext_resource type="Script" uid="uid://bag2rsl8b3m72" path="res://scripts/extras.gd" id="8_5vw27"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_0xm2m"]
-frequency = 1.0
-fractal_lacunarity = 3.0
+frequency = 0.8
+fractal_lacunarity = 4.0
 
 [sub_resource type="Gradient" id="Gradient_7mycd"]
 offsets = PackedFloat32Array(0.140351, 0.165775, 0.31016, 0.757962, 0.866242)
@@ -159,7 +159,6 @@ theme_override_constants/margin_bottom = 48
 
 [node name="Tab0" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -403,6 +402,7 @@ layout_mode = 2
 
 [node name="Tab1" type="VBoxContainer" parent="Parameters/Panel/MarginContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -699,10 +699,10 @@ focus_mode = 0
 text = "<<<"
 
 [node name="TabLabel" type="Label" parent="Parameters/Panel/MarginContainer/MainButtons/TabButtons"]
-visible = false
+unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
-text = " "
+text = " 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -754,6 +754,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("8_5vw27")
+preset1 = &"{\"climate_strength\":0.0,\"colour1\":0.0,\"colour2\":0.0,\"colour3\":0.0388888902962208,\"colour4\":0.0,\"detail\":256,\"frequency\":1.0,\"height_modifier\":2.5,\"lacunarity\":3.0,\"octaves\":5,\"seed\":-1803502162,\"water_depth\":10.5,\"water_level\":1.0}"
+preset2 = &"{\"climate_strength\":0.0,\"colour1\":0.0,\"colour2\":0.0,\"colour3\":0.737967789173126,\"colour4\":0.0,\"detail\":256,\"frequency\":1.0,\"height_modifier\":2.5,\"lacunarity\":3.0,\"octaves\":5,\"seed\":-1803502162,\"water_depth\":10.5,\"water_level\":1.0}"
+preset3 = &"{\"climate_strength\":0.374947552444748,\"colour1\":0.663865566253662,\"colour2\":0.617647051811218,\"colour3\":0.600840330123901,\"colour4\":0.617647051811218,\"detail\":256,\"frequency\":1.0,\"height_modifier\":2.5,\"lacunarity\":3.0,\"octaves\":5,\"seed\":-1803502162,\"water_depth\":10.5,\"water_level\":1.0}"
+preset_bugged = &"{\"climate_strength\":0.0,\"colour1\":0.0,\"colour2\":0.0,\"colour3\":0.737967789173126,0.0,\"detail\":256,\"frequency\":1.0,\"height_modifier\":2.5,\"lacunarity\":3.0,\"octaves\":5,\"ed\":-1803502162,\"water_depth\":10.5,\"water_level\":1.0}"
 
 [node name="FPS" type="Label" parent="Extras"]
 layout_mode = 1

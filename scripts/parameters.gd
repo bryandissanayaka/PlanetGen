@@ -117,11 +117,13 @@ func _on_reset_button_pressed():
 func _on_tab_right_pressed():
 	%Tab0.visible = false
 	%Tab1.visible = true
+	%TabLabel.text = "2"
 
 
 func _on_tab_left_pressed():
 	%Tab1.visible = false
 	%Tab0.visible = true
+	%TabLabel.text = "1"
 
 
 func _on_height_modifier_slider_value_changed(value):
@@ -206,7 +208,7 @@ var files = []
 func _on_save_pressed():
 	var n = %PlanetName.text
 	if not n:
-		n = "planet"
+		n = "untitled"
 	var path = "user://saves/"+n+".planet"
 	var save_file = FileAccess.open(path, FileAccess.WRITE)
 	var save_dict = planet.get_data()
@@ -237,6 +239,7 @@ func _on_import_item_selected(index):
 	var json = JSON.new()
 	var parse_result = json.parse(json_string)
 	if not parse_result == OK:
+		%Extras.error_msg("Error importing planet!")
 		return
 	var data = json.data
 	var success = planet.import_data(data)
@@ -245,7 +248,6 @@ func _on_import_item_selected(index):
 	if not success:
 		%Extras.error_msg("Error importing planet!")
 		return
-	
 	frequency_slider.value = data["frequency"]
 	frequency_label.text = "Frequency: " + str(snappedf(frequency_slider.value, 0.01))
 	octaves_slider.value = data["octaves"]
